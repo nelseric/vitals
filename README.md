@@ -2,8 +2,8 @@
 
 A client-side Valheim mod that plays sounds for things you might miss on screen:
 
-- **Low health:** two sharp beeps when health drops below 40% of max, repeated every 10 seconds while it stays low. Health has to climb 5 points above the threshold before a new drop beeps again, so regen hovering at the line stays quiet.
-- **Food ran out:** a soft falling chime when a food buff expires. Death and cleansing effects don't trigger it.
+- **Low health:** two sharp beeps when you lose health and end up below 40% of max, repeated every 10 seconds while it stays low. Health has to climb 5 points above the threshold before a new drop beeps again, so regen hovering at the line stays quiet. Eating doesn't set it off, even though a new food raises max health before your health catches up.
+- **Food ran out:** a soft falling chime when a food buff expires. Eating, dying and cleansing effects don't trigger it.
 
 The sounds are generated in code (no audio files) and are scaled by the game's master volume.
 

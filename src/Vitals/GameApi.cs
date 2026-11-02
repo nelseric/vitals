@@ -12,7 +12,8 @@ namespace Vitals
         private readonly FieldInfo _localPlayer;
         private readonly FieldInfo _foods;
         private readonly MethodInfo _isDead;
-        private readonly MethodInfo _getHealthPercentage;
+        private readonly MethodInfo _getHealth;
+        private readonly MethodInfo _getMaxHealth;
 
         private GameApi(Type player)
         {
@@ -20,7 +21,8 @@ namespace Vitals
             _localPlayer = AccessTools.Field(player, "m_localPlayer");
             _foods = AccessTools.Field(player, "m_foods");
             _isDead = AccessTools.Method(player, "IsDead");
-            _getHealthPercentage = AccessTools.Method(player, "GetHealthPercentage");
+            _getHealth = AccessTools.Method(player, "GetHealth");
+            _getMaxHealth = AccessTools.Method(player, "GetMaxHealth");
         }
 
         // Returns null and reports what is missing if this Valheim version doesn't match.
@@ -36,7 +38,7 @@ namespace Vitals
             foreach (var (member, name) in new (MemberInfo, string)[]
                      {
                          (api.UpdateFood, "Player.UpdateFood"), (api._localPlayer, "Player.m_localPlayer"), (api._foods, "Player.m_foods"),
-                         (api._isDead, "Character.IsDead"), (api._getHealthPercentage, "Character.GetHealthPercentage"),
+                         (api._isDead, "Character.IsDead"), (api._getHealth, "Character.GetHealth"), (api._getMaxHealth, "Character.GetMaxHealth"),
                      })
             {
                 if (member == null)
@@ -52,7 +54,9 @@ namespace Vitals
 
         public bool IsDead(object player) => (bool)_isDead.Invoke(player, null);
 
-        public float HealthFraction(object player) => (float)_getHealthPercentage.Invoke(player, null);
+        public float Health(object player) => (float)_getHealth.Invoke(player, null);
+
+        public float MaxHealth(object player) => (float)_getMaxHealth.Invoke(player, null);
 
         public int FoodCount(object player) => ((ICollection)_foods.GetValue(player)).Count;
     }

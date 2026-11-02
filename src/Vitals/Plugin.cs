@@ -76,13 +76,13 @@ namespace Vitals
                 _lowHealth.Reset();
                 return;
             }
-            if (_lowHealth.Step(Time.time, _game.HealthFraction(player)) && _lowHealthEnabled.Value)
+            if (_lowHealth.Step(Time.time, _game.Health(player), _game.MaxHealth(player)) && _lowHealthEnabled.Value)
                 _audio.PlayOneShot(_lowHealthClip, _lowHealthVolume.Value);
         }
 
         internal int FoodCount(object player) => _game.LocalPlayer() == player ? _game.FoodCount(player) : -1;
 
-        // Called after Player.UpdateFood, which removes a food only when it runs out.
+        // Called after Player.UpdateFood; a timed (not forced) update removes a food only when it runs out.
         internal void AfterUpdateFood(object player, int countBefore)
         {
             if (countBefore < 0 || !_foodEnabled.Value || _game.FoodCount(player) >= countBefore) return;
@@ -99,7 +99,8 @@ namespace Vitals
     // Applied to Player.UpdateFood(float dt, bool forceUpdate) in Plugin.Awake.
     internal static class PlayerUpdateFoodPatch
     {
-        internal static void Prefix(object __instance, out int __state) => __state = Plugin.Instance?.FoodCount(__instance) ?? -1;
+        // Eating forces an update that can expire a nearly-finished food; skip it so eating never chimes.
+        internal static void Prefix(object __instance, bool forceUpdate, out int __state) => __state = forceUpdate ? -1 : Plugin.Instance?.FoodCount(__instance) ?? -1;
 
         internal static void Postfix(object __instance, int __state) => Plugin.Instance?.AfterUpdateFood(__instance, __state);
     }
