@@ -9,7 +9,7 @@ The sounds are generated in code (no audio files) and are scaled by the game's m
 
 ## Install
 
-Needs [BepInEx 5](https://github.com/BepInEx/BepInEx/releases) (see Helmsman's README for setup). Copy `Vitals.dll` to `BepInEx/plugins/Vitals/`.
+Needs [BepInEx 5](https://github.com/BepInEx/BepInEx/releases) (see Helmsman's README for setup). Download `Vitals-<version>.zip` from the [latest release](https://github.com/nelseric/vitals/releases/latest) and extract it into the Valheim folder; it contains `BepInEx/plugins/Vitals/Vitals.dll`.
 
 ## Configuration
 
